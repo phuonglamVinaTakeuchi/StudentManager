@@ -6,36 +6,36 @@
 
 @model IEnumerable<StudentManager.Core.Data.Student>
 
-	<div class="text-center">
+<div class="text-center">
 	<h1 class="display-4"> User View</h1>
 
 	<table class="table">
 		<thead>
-			<tr>
-				<th scope="col">Name</th>
-				<th scope="col">Email</th>
-				<th scope="col">Address</th>
-				<th scope="col">Grade List</th>
-				<th scope="col">Edit</th>
-				<th scope="col">Delete</th>
-			</tr>
+		<tr>
+			<th scope="col">Name</th>
+			<th scope="col">Email</th>
+			<th scope="col">Address</th>
+			<th scope="col">Grade List</th>
+			<th scope="col">Edit</th>
+			<th scope="col">Delete</th>
+		</tr>
 		</thead>
 		<tbody>
-			@if (Model.Any())
+		@if (Model.Any())
+		{
+			@foreach (var student in Model)
 			{
-				@foreach (var student in Model)
-				{
-					<tr>
-						<td>@student.Name</td>
-						<td>@student.Email</td>
-						<td>@student.Address</td>
-						<td>@student.Grades.Count</td>
-						<td>
-							<a aso-controller="Student" asp-action="Edit" asp-route-id="@student.Id">Edit</a>
-						</td>
-					</tr>
-				}
+				<tr>
+					<td>@student.Name</td>
+					<td>@student.Email</td>
+					<td>@student.Address</td>
+					<td>@student.Grades.Count</td>
+					<td>
+						<a aso-controller="Student" asp-action="Edit" asp-route-id="@student.Id">Edit</a>
+					</td>
+				</tr>
 			}
+		}
 		</tbody>
 	</table>
 

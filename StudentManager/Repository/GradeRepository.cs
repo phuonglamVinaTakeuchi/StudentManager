@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using StudentManager.Areas.Identity.Data;
 using StudentManager.Core.Data;
 using StudentManager.Core.Repository;
@@ -27,55 +28,46 @@ namespace StudentManager.Repository
 
 		public async Task<Grade?> GetGradeByIdAsync(string gradeId)
 		{
-			return await DataContext.Grades.FirstOrDefaultAsync(x => Equals(x.Id, gradeId));
+			return await DataContext.Grades.Include(x=>x.Students).FirstOrDefaultAsync(x => Equals(x.Id, gradeId));
 		}
 
 		public async Task<Grade> UpdateGradeAsync(GradeViewModel editGrade)
 		{
+			var students = _studentRepository.GetStudents();
+
+			var selectedStudentIds = editGrade.StudentIds;
+
+			var selectedStudents = students.Where(s => selectedStudentIds.Contains(s.Id));
+			
+			editGrade.Grade.Students.Clear();
+			editGrade.Grade.Students.AddRange(selectedStudents);
 
 			return await UpdateGradeAsync(editGrade.Grade);
 		}
 
 		public async Task<Grade> UpdateGradeAsync(Grade editGrade)
 		{
-			//var dbGrade = await GetGradeByIdAsync(editGrade.Id);
+			var dbGrade = await GetGradeByIdAsync(editGrade.Id);
 
-			//if (dbGrade == null)
-			//{
-			//	return editGrade;
-			//}
+			if (dbGrade == null)
+			{
+				DataContext.Add(editGrade);
+				await DataContext.SaveChangesAsync();
+				return editGrade;
+			}
 
-			//dbGrade.Name = editGrade.Name;
-			//dbGrade.Description = editGrade.Description;
+			dbGrade.Name = editGrade.Name;
+			dbGrade.Description = editGrade.Description;
 
-			//var addStudents = editGrade
-			//	.Students
-			//	.Where(x => dbGrade.Students.All(s => !Equals(s.Id, x.Id)))
-			//	.ToList();
+			dbGrade.Students.Clear();
+			dbGrade.Students.AddRange(editGrade.Students);
 
-			//var removeStudents = dbGrade
-			//	.Students
-			//	.Where(x => editGrade.Students.All(s => !Equals(s.Id, x.Id)))
-			//	.ToList();
+			DataContext.Grades.Attach(dbGrade);
+			DataContext.Entry(dbGrade).State = EntityState.Modified;
 
-			//if (addStudents.Any())
-			//{
-			//	dbGrade.Students.AddRange(addStudents);
-			//}
+			await DataContext.SaveChangesAsync();
 
-			//if (removeStudents.Any())
-			//{
-			//	foreach (var removeStudent in removeStudents)
-			//	{
-			//		dbGrade.Students.Remove(removeStudent);
-			//	}
-			//}
-
-			//DataContext.Update(dbGrade);
-
-			//await DataContext.SaveChangesAsync();
-
-			return editGrade;
+			return dbGrade;
 		}
 
 		public async Task<Grade> AddNewGradeAsync(Grade grade)

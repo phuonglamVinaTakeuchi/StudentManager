@@ -8,23 +8,44 @@
 ////            });
 ////        });
 
-//$(document).ready(function ()   
-//{  
-//    // Enable Live Search.  
-//    $('#StudentList').attr('data-live-search', true);  
-  
-//    //// Enable multiple select.  
-//    $('#StudentList').attr('multiple', true);  
-//    $('#StudentList').attr('data-selected-text-format', 'count');  
-  
-//    $('.selectStudent').selectpicker(  
-//    {   width: '100%',  
-//        title: '- [Choose Multiple Students] -',  
-//        style: 'bg-white rounded-pill px-4 py-3 shadow-sm',  
-//        size: 6,  
-//        iconBase: 'fa',  
-//        tickIcon: 'fa-check'  
-//    });  
-//});  
+//$(document).ready(function ()
+//{
+//    // Enable Live Search.
+//    $('#StudentList').attr('data-live-search', true);
+
+//    //// Enable multiple select.
+//    $('#StudentList').attr('multiple', true);
+//    $('#StudentList').attr('data-selected-text-format', 'count');
+
+//    $('.selectStudent').selectpicker(
+//    {   width: '100%',
+//        title: '- [Choose Multiple Students] -',
+//        style: 'bg-white rounded-pill px-4 py-3 shadow-sm',
+//        size: 6,
+//        iconBase: 'fa',
+//        tickIcon: 'fa-check'
+//    });
+//});
 
 //$('.selectpicker').selectpicker();
+
+$(document).ready(function () {
+			// Enable Live Search.
+			$('#StudentList').attr('data-live-search', true);
+
+			// Enable multiple select.
+			$('#StudentList').attr('multiple', true);
+			$('#StudentList').attr('data-selected-text-format', 'count > 3');
+
+			$('#StudentList').attr('data-actions-box', true);
+
+			$('.selectStudent').selectpicker(
+				{
+					width: '100%',
+					title: '- [Choose Multiple Students] -',
+					style: "btn-primary",
+					size: 6,
+					iconBase: 'fa',
+					tickIcon: 'fa-check'
+				});
+		});

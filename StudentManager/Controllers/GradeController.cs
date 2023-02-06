@@ -27,20 +27,30 @@ namespace StudentManager.Controllers
 
 		public async Task<IActionResult> Edit(string id)
 		{
+			var students = _repositories.StudentRepository.GetStudents();
 			var grade = await _repositories.GradeRepository.GetGradeByIdAsync(id);
 
-			var gradeViewModel = new GradeViewModel();
-			gradeViewModel.Grade = grade;
+			var selectedStudentIds = grade.Students.Select(x=>x.Id).ToList();
+
+			var selecListStudents = students.Select(st => new SelectListItem(st.Name, st.Id, grade.Students.Any(x=>Equals(x.Id,st.Id))));
+
+			var gradeViewModel = new GradeViewModel()
+			{
+				Grade = grade,
+				Students = selecListStudents.ToList(),
+				StudentIds = selectedStudentIds
+			};
+			
 
 			return View(gradeViewModel);
 		}
 
 		[HttpPost]
-		public IActionResult Edit(GradeViewModel gradeViewModel)
+		public async Task<IActionResult> Edit(GradeViewModel gradeViewModel)
 		{
 			if (ModelState.IsValid)
 			{
-				_repositories.GradeRepository.UpdateGradeAsync(gradeViewModel);
+				await _repositories.GradeRepository.UpdateGradeAsync(gradeViewModel);
 				return RedirectToAction("Index");
 			}
 
@@ -72,14 +82,14 @@ namespace StudentManager.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create(GradeViewModel gradeViewModel)
 		{
-			//if (ModelState.IsValid)
-			//{
+			if (ModelState.IsValid)
+			{
 				var grade = await _repositories.GradeRepository.AddNewGradeAsync(gradeViewModel);
 
 				return RedirectToAction(nameof(Index));
-			//}
+			}
 
-			//return View(gradeViewModel);
+			return View(gradeViewModel);
 		}
 
 	}

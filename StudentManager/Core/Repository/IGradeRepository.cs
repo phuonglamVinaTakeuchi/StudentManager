@@ -8,8 +8,9 @@ namespace StudentManager.Core.Repository
 	{
 		IEnumerable<Grade> GetGrades();
 		Task<Grade?> GetGradeByIdAsync(string gradeId);
-		Task<Grade> UpdateGradeAsync(GradeViewModel grade);
+
 		Task<Grade> UpdateGradeAsync(Grade grade);
+		Task<Grade> UpdateGradeAsync(GradeViewModel grade);
 		Task<Grade> AddNewGradeAsync(Grade grade);
 		Task<Grade> AddNewGradeAsync(GradeViewModel gradeViewModel);
 		//Task<Grade> AddNewGradesAsync(IEnumerable<Grade> grades);
