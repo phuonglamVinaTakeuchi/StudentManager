@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model EditUserViewModel
+@{
+	ViewData["Title"] = "Edit user";
+}
+
+<div class="text-center">
+	<h1 class="display-4">Edit user</h1>
+</div>
+<div class="row g-5">
+	<div class="col-md-7 col-lg-8">
+		@using (Html.BeginForm("Edit", "User"))
+		{
+			@Html.HiddenFor(h => @Model.User.Id)
+			;
+			<div class="row g-3">
+				<div class="col-sm-6">
+					<label asp-for="User.FirstName" class="form-label"></label>
+					<input asp-for="User.FirstName" class="form-control" autocomplete="username" aria-required="true">
+					<span asp-validation-for="User.FirstName" class="text-danger"></span>
+				</div>
+
+				<div class="col-sm-6">
+					<label asp-for="User.LastName" class="form-label"></label>
+					<input asp-for="User.LastName" class="form-control" autocomplete="username" aria-required="true">
+					<span asp-validation-for="User.LastName" class="text-danger"></span>
+				</div>
+
+				<div class="col-12">
+					<label asp-for="User.Email" class="form-label"></label>
+					<input asp-for="User.Email" class="form-control" autocomplete="username" aria-required="true">
+					<span asp-validation-for="User.Email" class="text-danger"></span>
+				</div>
+			</div>
+
+			<hr class="my-4">
+
+			<h4 class="mb-3">Roles</h4>
+
+			<div class="my-3">
+				@for (var i = 0; i < Model.Roles.Count; i++)
+				{
+					<div class="form-check">
+						@Html.CheckBoxFor(r=>Model.Roles[i].Selected)
+						@Html.HiddenFor(r=>Model.Roles[i].Value)
+						@Html.LabelFor(r=>Model.Roles[i].Selected,Model.Roles[i].Text,new {@class="form-check-label"})
+						@Html.HiddenFor(r=>Model.Roles[i].Text)
+					</div>
+				}
+			</div>
+
+			<hr class="my-4">
+
+			<button class="w-100 btn btn-primary btn-lg" type="submit">Save</button>
+		}
+	</div>
+	<a asp-controller="User" asp-action="Index">Back</a>
+</div>
